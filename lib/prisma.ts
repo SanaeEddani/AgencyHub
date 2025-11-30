@@ -5,8 +5,14 @@ import ws from 'ws';
 // Config WebSocket pour Neon
 neonConfig.webSocketConstructor = ws;
 
+// Déclare global.prisma correctement pour TypeScript
+declare global {
+    // eslint-disable-next-line no-var
+    var prisma: PrismaClient | undefined;
+}
+
 // PrismaClient normal, sans adapter
-const prisma = global.prisma || new PrismaClient({ log: ['query'] });
+const prisma = global.prisma ?? new PrismaClient({ log: ['query'] });
 
 // Pour éviter plusieurs instances en développement
 if (process.env.NODE_ENV === 'development') global.prisma = prisma;
