@@ -7,6 +7,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+// Définir le type des props
+type DashboardProps = {
+    agencies: number;
+    contacts: number;
+};
+
 export async function getServerSideProps() {
     const agencies = await prisma.agency.count();
     const contacts = await prisma.contact.count();
@@ -19,7 +25,8 @@ export async function getServerSideProps() {
     };
 }
 
-export default function Dashboard({ agencies, contacts }) {
+// 🔹 Typage ajouté ici
+export default function Dashboard({ agencies, contacts }: DashboardProps) {
     const { user } = useUser();
     const [remaining, setRemaining] = useState(50);
 
@@ -85,7 +92,7 @@ export default function Dashboard({ agencies, contacts }) {
                                     </div>
                                 </div>
 
-                                {/*  CARDS WITH BUTTONS */}
+                                {/* CARDS WITH BUTTONS */}
                                 <div style={{ display: "flex", flexDirection: "column", gap: 20, marginBottom: 25 }}>
 
                                     {/* Card 1: Find Agencies */}

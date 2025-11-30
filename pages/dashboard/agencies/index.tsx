@@ -9,6 +9,7 @@ import Topbar from "@/components/Topbar";
 import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 
+// Typage pour les agences
 type Agency = {
     id: string;
     name: string;
@@ -19,7 +20,13 @@ type Agency = {
     website?: string | null;
 };
 
-export default function AgenciesPage() {
+// Typage des props pour le composant Dashboard
+type AgenciesPageProps = {
+    agencies?: Agency[];
+    contacts?: number; // ou Agency[] si tu passes des contacts détaillés
+};
+
+export default function AgenciesPage({ agencies = [], contacts = 0 }: AgenciesPageProps) {
     const [items, setItems] = useState<Agency[]>([]);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
@@ -40,7 +47,7 @@ export default function AgenciesPage() {
         if (stateCodeFilter) params.set("state_code", stateCodeFilter);
 
         const res = await fetch(`/api/agencies/list?${params.toString()}`);
-        const data = await res.json();
+        const data: { items: Agency[]; page: number; totalPages: number; total: number } = await res.json();
 
         setItems(data.items || []);
         setPage(data.page || 1);
@@ -54,7 +61,7 @@ export default function AgenciesPage() {
         load(1);
     }, []);
 
-    function handleSearch(e: React.FormEvent) {
+    function handleSearch(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         load(1);
     }
@@ -157,7 +164,7 @@ export default function AgenciesPage() {
                                                     <th style={{ padding: "12px 8px" }}>Type</th>
                                                     <th style={{ padding: "12px 8px" }}>Population</th>
                                                     <th style={{ padding: "12px 8px" }}>Website</th>
-                                                    <th style={{ padding: "12px 8px" }}>Contacts</th>
+                                                    <th style={{ padding: "12px 8px }}>Contacts</th>
                                                 </tr>
                                             </thead>
 
@@ -193,22 +200,10 @@ export default function AgenciesPage() {
                                                                 ) : "-"}
                                                             </td>
                                                             <td style={{ padding: "12px 8px", textAlign: "center" }}>
-                                                                <a
-                                                                    href={`/dashboard/contacts?agencyName=${encodeURIComponent(a.name)}`}
-                                                                    style={{
-                                                                        color: "#6C757D",
-                                                                        fontSize: 20,
-                                                                        textDecoration: "none",
-                                                                        display: "inline-flex",
-                                                                        alignItems: "center",
-                                                                        justifyContent: "center",
-                                                                    }}
-                                                                    title={`View contacts for ${a.name}`}
-                                                                >
-                                                                    <FiEye />
-                                                                </a>
+                                                                <Link href={`/dashboard/contacts?agencyName=${encodeURIComponent(a.name)}`}>
+                                                                    <FiEye size={20} style={{ color: "#6C757D" }} />
+                                                                </Link>
                                                             </td>
-
                                                         </tr>
                                                     ))
                                                 )}
