@@ -45,7 +45,7 @@ model Contact {
 
 model UserDailyCount {
   id     Int      @id @default(autoincrement())
-  userId String
+  userId String   @map("userid") 
   date   DateTime
   count  Int
 
