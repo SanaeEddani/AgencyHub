@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Agency {
+  id         String    @id
+  name       String
+  state      String?
+  state_code String?
+  type       String?
+  population Int?
+  website    String?
+  country    String?
+  created_at DateTime  @default(now())
+  updated_at DateTime
+  Contact    Contact[]
+}
+
+model Contact {
+  id               String   @id
+  first_name       String?
+  last_name        String?
+  email            String?
+  phone            String?
+  title            String?
+  email_type       String?
+  contact_form_url String?
+  created_at       DateTime @default(now())
+  updated_at       DateTime
+  agency_id        String?
+  department       String?
+  Agency           Agency?  @relation(fields: [agency_id], references: [id])
+}
+
+model UserDailyCount {
+  id     Int      @id @default(autoincrement())
+  userId String
+  date   DateTime
+  count  Int
+
+  @@unique([userId, date])
+}
