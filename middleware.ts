@@ -1,10 +1,19 @@
 // middleware.ts
-import { withClerkMiddleware } from "@clerk/nextjs/edge";
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs";
 
-export default withClerkMiddleware((req) => {
-    return new Response("OK"); // middleware minimal, juste pour build
-});
+export function middleware(req: NextRequest) {
+    const { userId } = auth(req);
 
+    // Ici, tu peux protéger tes routes API
+    if (!userId && req.nextUrl.pathname.startsWith("/api")) {
+        return NextResponse.redirect(new URL("/sign-in", req.url));
+    }
+
+    return NextResponse.next();
+}
+
+// Appliquer le middleware uniquement aux routes API
 export const config = {
-    matcher: ["/api/:path*"], // protège tes routes API
+    matcher: ["/api/:path*"],
 };
