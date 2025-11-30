@@ -1,5 +1,8 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+// middleware.ts
+import { clerkMiddleware } from "@clerk/nextjs";
 
-export default clerkMiddleware({
-    matcher: ["/api/:path*"],
-});
+export default clerkMiddleware();
+
+export const config = {
+    matcher: ["/api/:path*"], // Définir les routes ici
+};
