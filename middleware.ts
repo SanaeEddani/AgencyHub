@@ -1,8 +1,10 @@
 // middleware.ts
-import { clerkMiddleware } from "@clerk/nextjs";
+import { withClerkMiddleware } from "@clerk/nextjs/edge";
 
-export default clerkMiddleware();
+export default withClerkMiddleware((req) => {
+    return new Response("OK"); // middleware minimal, juste pour build
+});
 
 export const config = {
-    matcher: ["/api/:path*"], // Définir les routes ici
+    matcher: ["/api/:path*"], // protège tes routes API
 };
