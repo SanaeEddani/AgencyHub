@@ -1,10 +1,12 @@
 generator client {
   provider = "prisma-client-js"
+   previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+   
 }
 
 model Agency {
@@ -19,6 +21,8 @@ model Agency {
   created_at DateTime  @default(now())
   updated_at DateTime
   Contact    Contact[]
+
+  @@map("agency") // <-- mappe le modèle Prisma à la table PostgreSQL en minuscules
 }
 
 model Contact {
@@ -35,6 +39,8 @@ model Contact {
   agency_id        String?
   department       String?
   Agency           Agency?  @relation(fields: [agency_id], references: [id])
+
+  @@map("contact") // <-- mappe le modèle Prisma à la table PostgreSQL en minuscules
 }
 
 model UserDailyCount {
@@ -44,4 +50,5 @@ model UserDailyCount {
   count  Int
 
   @@unique([userId, date])
+  @@map("userdailycount") // <-- mappe le modèle Prisma à la table PostgreSQL en minuscules
 }

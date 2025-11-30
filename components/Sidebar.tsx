@@ -47,11 +47,12 @@ export default function Sidebar() {
                 minWidth: 220,
                 background: "#fff",
                 borderRight: "1px solid rgba(0,0,0,0.06)",
-                paddingTop: 20,
+                paddingTop: 0,
                 paddingBottom: 20,
                 zIndex: 50,
             }}
         >
+
 
 
             <nav style={{ display: "flex", flexDirection: "column", gap: 6 }}>

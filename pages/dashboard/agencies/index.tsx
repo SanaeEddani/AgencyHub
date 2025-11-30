@@ -4,12 +4,10 @@ import { useEffect, useState } from "react";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import SignInPage from "../../sign-in/[[...index]]";
 import { FiEye } from "react-icons/fi";
-
 import Topbar from "@/components/Topbar";
 import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 
-// Typage pour les agences
 type Agency = {
     id: string;
     name: string;
@@ -20,13 +18,7 @@ type Agency = {
     website?: string | null;
 };
 
-// Typage des props pour le composant Dashboard
-type AgenciesPageProps = {
-    agencies?: Agency[];
-    contacts?: number; // ou Agency[] si tu passes des contacts détaillés
-};
-
-export default function AgenciesPage({ agencies = [], contacts = 0 }: AgenciesPageProps) {
+export default function AgenciesPage() {
     const [items, setItems] = useState<Agency[]>([]);
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
@@ -47,7 +39,7 @@ export default function AgenciesPage({ agencies = [], contacts = 0 }: AgenciesPa
         if (stateCodeFilter) params.set("state_code", stateCodeFilter);
 
         const res = await fetch(`/api/agencies/list?${params.toString()}`);
-        const data: { items: Agency[]; page: number; totalPages: number; total: number } = await res.json();
+        const data = await res.json();
 
         setItems(data.items || []);
         setPage(data.page || 1);
@@ -61,7 +53,7 @@ export default function AgenciesPage({ agencies = [], contacts = 0 }: AgenciesPa
         load(1);
     }, []);
 
-    function handleSearch(e: React.FormEvent<HTMLFormElement>) {
+    function handleSearch(e: React.FormEvent) {
         e.preventDefault();
         load(1);
     }
@@ -103,7 +95,7 @@ export default function AgenciesPage({ agencies = [], contacts = 0 }: AgenciesPa
                                             flex: 1,
                                             padding: "10px 12px",
                                             borderRadius: 8,
-                                            border: "1px solid #f97316",
+                                            border: "1px solid #ea580c",
                                             outline: "none"
                                         }}
                                     />
@@ -136,7 +128,7 @@ export default function AgenciesPage({ agencies = [], contacts = 0 }: AgenciesPa
                                         style={{
                                             padding: "10px 14px",
                                             borderRadius: 8,
-                                            background: "#f97316",
+                                            background: "#ea580c",
                                             color: "#fff",
                                             border: "none",
                                             fontWeight: 500,
@@ -165,7 +157,6 @@ export default function AgenciesPage({ agencies = [], contacts = 0 }: AgenciesPa
                                                     <th style={{ padding: "12px 8px" }}>Population</th>
                                                     <th style={{ padding: "12px 8px" }}>Website</th>
                                                     <th style={{ padding: "12px 8px" }}>Contacts</th>
-
                                                 </tr>
                                             </thead>
 
@@ -185,7 +176,7 @@ export default function AgenciesPage({ agencies = [], contacts = 0 }: AgenciesPa
                                                 ) : (
                                                     items.map((a) => (
                                                         <tr key={a.id} style={{ borderBottom: "1px solid #f1f5f9", cursor: "pointer", transition: "background 0.2s" }}
-                                                            onMouseEnter={e => (e.currentTarget.style.background = "#fff7ed")}
+                                                            onMouseEnter={e => (e.currentTarget.style.background = "#F3F4F6")}
                                                             onMouseLeave={e => (e.currentTarget.style.background = "#fff")}
                                                         >
                                                             <td style={{ padding: "12px 8px" }}>{a.name}</td>
@@ -195,15 +186,26 @@ export default function AgenciesPage({ agencies = [], contacts = 0 }: AgenciesPa
                                                             <td style={{ padding: "12px 8px" }}>{a.population ?? "-"}</td>
                                                             <td style={{ padding: "12px 8px" }}>
                                                                 {a.website ? (
-                                                                    <a href={a.website} target="_blank" rel="noreferrer" style={{ color: "#FDBA74" }}>
+                                                                    <a href={a.website} target="_blank" rel="noreferrer" style={{ color: "#3F72AF" }}>
                                                                         Visit
                                                                     </a>
                                                                 ) : "-"}
                                                             </td>
                                                             <td style={{ padding: "12px 8px", textAlign: "center" }}>
-                                                                <Link href={`/dashboard/contacts?agencyName=${encodeURIComponent(a.name)}`}>
-                                                                    <FiEye size={20} style={{ color: "#6C757D" }} />
-                                                                </Link>
+                                                                <a
+                                                                    href={`/dashboard/contacts?agencyName=${encodeURIComponent(a.name)}`}
+                                                                    style={{
+                                                                        color: "#7EC969",
+                                                                        fontSize: 20,
+                                                                        textDecoration: "none",
+                                                                        display: "inline-flex",
+                                                                        alignItems: "center",
+                                                                        justifyContent: "center",
+                                                                    }}
+                                                                    title={`View contacts for ${a.name}`}
+                                                                >
+                                                                    <FiEye />
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                     ))

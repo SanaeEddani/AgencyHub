@@ -1,16 +1,14 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
+import { neonConfig } from '@neondatabase/serverless';
+import ws from 'ws';
 
-const globalForPrisma = global as unknown as {
-    prisma: PrismaClient | undefined;
-};
+// Config WebSocket pour Neon
+neonConfig.webSocketConstructor = ws;
 
-export const prisma =
-    globalForPrisma.prisma ??
-    new PrismaClient({
-        log: ["query"],
-    });
+// PrismaClient normal, sans adapter
+const prisma = global.prisma || new PrismaClient({ log: ['query'] });
 
-if (process.env.NODE_ENV !== "production") {
-    globalForPrisma.prisma = prisma;
-}
+// Pour éviter plusieurs instances en développement
+if (process.env.NODE_ENV === 'development') global.prisma = prisma;
+
 export default prisma;

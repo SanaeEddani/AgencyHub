@@ -2,7 +2,7 @@ import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import SignInPage from "../sign-in/[[...index]]";
 import Topbar from "@/components/Topbar";
 import Sidebar from "@/components/Sidebar";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
