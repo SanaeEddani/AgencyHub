@@ -1,11 +1,12 @@
 // middleware.ts
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { getAuth } from "@clerk/nextjs/server";
 
 export function middleware(req: NextRequest) {
-    const { userId } = auth(req);
+    const { userId } = getAuth(req);
 
-    // Ici, tu peux protéger tes routes API
+    // Bloquer les utilisateurs non connectés sur les routes /api/*
     if (!userId && req.nextUrl.pathname.startsWith("/api")) {
         return NextResponse.redirect(new URL("/sign-in", req.url));
     }
@@ -13,7 +14,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
 }
 
-// Appliquer le middleware uniquement aux routes API
+// Appliquer seulement aux routes API
 export const config = {
     matcher: ["/api/:path*"],
 };
