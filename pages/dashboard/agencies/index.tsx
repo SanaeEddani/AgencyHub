@@ -164,7 +164,8 @@ export default function AgenciesPage({ agencies = [], contacts = 0 }: AgenciesPa
                                                     <th style={{ padding: "12px 8px" }}>Type</th>
                                                     <th style={{ padding: "12px 8px" }}>Population</th>
                                                     <th style={{ padding: "12px 8px" }}>Website</th>
-                                                    <th style={{ padding: "12px 8px }}>Contacts</th>
+                                                    <th style={{ padding: "12px 8px" }}>Contacts</th>
+
                                                 </tr>
                                             </thead>
 
